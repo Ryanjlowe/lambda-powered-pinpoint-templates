@@ -66,10 +66,12 @@ EMAIL,2,EMAIL_ADDRESS2_HERE,2,John,subbrand,321.45,zh-CN,JPY,2020-05-10T10:00:00
   * Run `npm run build` in each Lambda folder to build a deployable Zip file
   * Ensure Lambda functions have IAM permissions to call Pinpoint, invoke other Lambda functions, and access files in S3
   * Ensure Lambda functions have environment variables defined
+
     | Lambda Function | Environment Variable Name | Value |
     | --------------- | --------------- | --------------- |
     | campaign-hook | TEMPLATE_ENGINE_LAMBDA | [ARN of the Template Lambda Function]
     | template-engine | TEMPLATE_BUCKET | [Template S3 Bucket Name] |
+    
 3. Create a Pinpoint Project
 4. Connect the campaign hook Lambda to a Pinpoint Project
 [Full Lambda Hook Documentation for](https://docs.aws.amazon.com/pinpoint/latest/developerguide/segments-dynamic.html)
