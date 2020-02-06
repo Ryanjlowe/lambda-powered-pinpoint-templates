@@ -39,6 +39,21 @@ Handlebars.registerHelper('dateFormat', (date, format) => {
     return dateFormat(new Date(date), format);
 });
 
+Handlebars.registerHelper('invokeLambda', (lambdaName, context) => {
+  const params = {
+    Endpoint: context.data.root
+  };
+
+  return lambda.invoke({
+    FunctionName: lambdaName,
+    InvocationType: "RequestResponse",
+    Payload: Buffer.from(JSON.stringify(params))
+  }).promise()
+    .then((response) => {
+      return context.fn(JSON.parse(response.Payload.toString()));
+    });
+});
+
 
 exports.handler = async (event) => {
 
@@ -71,36 +86,3 @@ const processHandlebars = function(s, c) {
     return { html };
   });
 };
-
-
-
-// const cache = require('./Cache');
-// Handlebars.registerHelper('content-block', function(s3Key, context) {
-//
-//   let p = null;
-//
-//   const cacheItem = cache.get(s3key);
-//   if (cacheItem) {
-//     p = Promise.resolve(cacheItem);
-//   } else {
-//
-//     const params = {
-//       ContentBlock: s3Key,
-//       DataRoot: context.data.root
-//     };
-//
-//     p = lambda.invoke({
-//       FunctionName: process.env.AWS_LAMBDA_FUNCTION_NAME,
-//       InvocationType: "RequestResponse",
-//       Payload: Buffer.from(JSON.stringify(params))
-//     }).promise()
-//     .then((response) => {
-//       const html = JSON.parse(response.Payload.toString()).html
-//       cache.put(s3Key, html, 1000 * 20);
-//       return html;
-//     })
-//   }
-//   return p.then((html) => {
-//     return new Handlebars.SafeString(html);
-//   });
-// });

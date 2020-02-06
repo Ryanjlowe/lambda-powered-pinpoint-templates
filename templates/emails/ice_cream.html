@@ -7,4 +7,23 @@
 
 <p>Your Deal expires {{dateFormat Attributes.ExpireDate "dddd, mmmm d, yyyy"}}
 
+<p>
+  {{#invokeLambda "example-invoked-lambda"}}
+  <table>
+    <tr>
+      <td>Product Image from Lambda:</td>
+      <td><img src="{{{image}}}" width="100" /></td>
+    </tr>
+    <tr>
+      <td>Product Name</td>
+      <td><a href="{{{link}}}">{{{name}}}</a></td>
+    </tr>
+    <tr>
+      <td>Price:</td>
+      <td>{{{price}}}</td>
+    </tr>
+  </table>
+  {{/invokeLambda}}
+</p>
+
 {{content-block "common/footer.html"}}
