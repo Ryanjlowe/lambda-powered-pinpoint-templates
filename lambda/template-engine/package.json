@@ -1,0 +1,24 @@
+{
+    "name": "template-engine",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "pretest": "npm install",
+        "build:init": "rm -rf package-lock.json && rm -rf dist && rm -rf node_modules",
+        "build:zip": "rm -rf package-lock.json && zip -rq --exclude=*tests* --exclude=*template.yml template-engine.zip .",
+        "build:dist": "mkdir dist && mv template-engine.zip dist/",
+        "build": "npm run build:init && npm install --production && npm run build:zip && npm run build:dist",
+        "coverage": "nyc npm test"
+    },
+    "author": {
+        "name": "Ryan Lowe"
+    },
+    "license": "Apache 2.0",
+    "dependencies": {
+        "dateformat": "^3.0.3",
+        "handlebars": "^4.7.3",
+        "promised-handlebars": "^2.0.1",
+        "q": "^1.5.1"
+    }
+}

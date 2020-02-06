@@ -1,0 +1,24 @@
+# compiled output
+**/dist
+**/.zip
+**/tmp
+**/out-tsc
+
+# dependencies
+**/node_modules
+
+# e2e
+**/e2e/*.js
+**/e2e/*.map
+
+# misc
+**/npm-debug.log
+**/testem.log
+**/package-lock.json
+**/.vscode/settings.json
+
+# System Files
+**/.DS_Store
+**/.vscode
+
+example-import.csv

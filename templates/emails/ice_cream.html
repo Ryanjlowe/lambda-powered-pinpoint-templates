@@ -1,0 +1,10 @@
+
+{{content-block "common/header.html"}}
+
+<p>Here is my Ice Cream promotion email.  I am so happy you are here {{Attributes.FirstName}}</p>
+
+<p>Your price is {{currencyFormat Attributes.Price Attributes.Locale Attributes.Currency}}
+
+<p>Your Deal expires {{dateFormat Attributes.ExpireDate "dddd, mmmm d, yyyy"}}
+
+{{content-block "common/footer.html"}}
