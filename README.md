@@ -50,3 +50,51 @@ Main files:
 │   └── example-invoked-lambda
 │       └── index.js                                    <-- Example function that returns values used in blocks
 ```
+
+## Example Segment
+Save the following as a CSV file to test the example templates located in this repository.  It has the necessary attributes to render the ice_cream email.
+```
+ChannelType,Id,Address,User.UserId,Attributes.FirstName,Attributes.brand,Attributes.Price,Attributes.Locale,Attributes.Currency,Attributes.ExpireDate
+EMAIL,1,EMAIL_ADDRESS1_HERE,1,Ryan,mainbrand,125.32,en-US,USD,2020-03-10T10:00:00
+EMAIL,2,EMAIL_ADDRESS2_HERE,2,John,subbrand,321.45,zh-CN,JPY,2020-05-10T10:00:00
+```
+
+## Set up
+1. Deploy the Templates in an S3 bucket
+`aws s3 templates/ s3://[BUCKET NAME]`
+2. Deploy Lambdas
+  * Run `npm run build` in each Lambda folder to build a deployable Zip file
+  * Ensure Lambda functions have IAM permissions to call Pinpoint, invoke other Lambda functions, and access files in S3
+  * Ensure Lambda functions have environment variables defined
+     * campaign-hook lambda:  TEMPLATE_ENGINE_LAMBDA: [ARN of the Template Lambda Function]
+     * template-engine lambda:  TEMPLATE_BUCKET: [Name of the S3 bucket where the templates are hosted]
+3. Create a Pinpoint Project
+4. Connect the campaign hook Lambda to a Pinpoint Project
+[Full Lambda Hook Documentation for](https://docs.aws.amazon.com/pinpoint/latest/developerguide/segments-dynamic.html)
+```
+aws lambda add-permission \
+ --function-name [CAMPAIGN_HOOK LAMBDA ARN] \
+ --statement-id lambdaHookStatement1 \
+ --action lambda:InvokeFunction \
+ --principal pinpoint.[REGION].amazonaws.com \
+ --source-arn arn:aws:mobiletargeting:[REGION]:[AWS_ACCOUNT_ID]:/apps/[PINPOINT_PROJECT_ID]/*
+
+ aws lambda add-permission \
+ --function-name [CAMPAIGN_HOOK LAMBDA ARN] \
+ --statement-id lambdaHookStatement12 \
+ --action lambda:InvokeFunction \
+ --principal pinpoint.[REGION].amazonaws.com \
+ --source-arn arn:aws:mobiletargeting:[REGION]:[AWS_ACCOUNT_ID]:/apps/[PINPOINT_PROJECT_ID]
+
+ aws pinpoint update-application-settings \
+ --application-id [PINPOINT_PROJECT_ID] \
+ --write-application-settings-request 'CampaignHook={LambdaFunctionName="[CAMPAIGN_HOOK LAMBDA ARN]",Mode="FILTER"}'
+```
+5. Create a Pinpoint Template with the following Message Body
+```
+<!DOCTYPE html>
+{{! BaseTemplate=emails/ice_cream.html }}
+<html>{{Attributes.html}}</html>
+```
+6. Import segment from above
+7. Create a campaign using the segment and the created Pinpoint Template and schedule for immediate send
