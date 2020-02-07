@@ -31,12 +31,16 @@ Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });
 
-Handlebars.registerHelper('currencyFormat', (price, format, currency) => {
-    return new Intl.NumberFormat(format, { style: 'currency', currency: currency }).format(price);
+Handlebars.registerHelper('currencyFormat', (priceArr, format, currency) => {
+    return [].concat(priceArr).map((price) => {
+      return new Intl.NumberFormat(format, { style: 'currency', currency: currency }).format(price);
+    });
 });
 
-Handlebars.registerHelper('dateFormat', (date, format) => {
-    return dateFormat(new Date(date), format);
+Handlebars.registerHelper('dateFormat', (dateArr, format) => {
+    return [].concat(dateArr).map((date) => {
+      return dateFormat(new Date(date), format);
+    });
 });
 
 Handlebars.registerHelper('invokeLambda', (lambdaName, context) => {
@@ -44,35 +48,46 @@ Handlebars.registerHelper('invokeLambda', (lambdaName, context) => {
     Endpoint: context.data.root
   };
 
+  console.log('LambdaName: ' + lambdaName);
+
   return lambda.invoke({
     FunctionName: lambdaName,
     InvocationType: "RequestResponse",
     Payload: Buffer.from(JSON.stringify(params))
   }).promise()
     .then((response) => {
-      return context.fn(JSON.parse(response.Payload.toString()));
+      const json = JSON.parse(response.Payload.toString());
+      console.log('RESPONSE: ' + response.Payload.toString());
+      return context.fn(json);
     });
 });
 
-Handlebars.registerHelper('upperCase', (str) => {
-  return str.toUpperCase();
+Handlebars.registerHelper('upperCase', (strArr) => {
+  return [].concat(strArr).map((str) => {
+    return str.toUpperCase();
+  });
 });
 
-Handlebars.registerHelper('lowerCase', (str) => {
-  return str.toLowerCase();
+Handlebars.registerHelper('lowerCase', (strArr) => {
+  return [].concat(strArr).map((str) => {
+    return str.toLowerCase();
+  });
 });
 
-Handlebars.registerHelper('properCase', (str) => {
-  return str.toLowerCase().split(' ').map(function(word) {
-    return (word.charAt(0).toUpperCase() + word.slice(1));
-  }).join(' ');
+Handlebars.registerHelper('properCase', (strArr) => {
+
+  return [].concat(strArr).map((str) => {
+    return str.toLowerCase().split(' ').map(function(word) {
+      return (word.charAt(0).toUpperCase() + word.slice(1));
+    }).join(' ');
+  });
 });
 
-Handlebars.registerHelper('urlencode', (str) => {
-  return encodeURIComponent(str);
-})
-
-
+Handlebars.registerHelper('urlencode', (strArr) => {
+  return [].concat(strArr).map((str) => {
+    return encodeURIComponent(str);
+  });
+});
 
 
 exports.handler = async (event) => {
