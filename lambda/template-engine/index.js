@@ -54,6 +54,26 @@ Handlebars.registerHelper('invokeLambda', (lambdaName, context) => {
     });
 });
 
+Handlebars.registerHelper('upperCase', (str) => {
+  return str.toUpperCase();
+});
+
+Handlebars.registerHelper('lowerCase', (str) => {
+  return str.toLowerCase();
+});
+
+Handlebars.registerHelper('properCase', (str) => {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return (word.charAt(0).toUpperCase() + word.slice(1));
+  }).join(' ');
+});
+
+Handlebars.registerHelper('urlencode', (str) => {
+  return encodeURIComponent(str);
+})
+
+
+
 
 exports.handler = async (event) => {
 

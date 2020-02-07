@@ -7,7 +7,7 @@ Using MustacheJS to render email templates stored in S3
 
 {{content-block "common/header.html"}}
 
-<p>Here is my Ice Cream promotion email.  I am so happy you are here {{Attributes.FirstName}}</p>
+<p>Here is my Ice Cream promotion email.  I am so happy you are here {{properCase Attributes.FirstName}}</p>
 
 <p>Your price is {{currencyFormat Attributes.Price Attributes.Locale Attributes.Currency}}
 
@@ -36,6 +36,19 @@ Using MustacheJS to render email templates stored in S3
 
 ```
 
+## MustacheJS Registered Helpers
+| Helper | Description |
+| ---- | ---- |
+| content-block | fetches a templatized content block by S3 key and recursively processes it |
+| ifEquals | compares two values together |
+| currencyFormat | formats a string of numbers for currency display |
+| dateFormat | formats a string into a date string |
+| invokeLambda | block invokes another lambda and makes the return object available inside the block |
+| upperCase | RETURNS AN UPPERCASED VERSION OF THE STRING |
+| lowerCase | returns a lowercased version of the string |
+| properCase | Returns A String Where Every Word Starts With A Capital Letter |
+| urlencode | Encodes a string to be placed in a URL |
+
 ## Repository content
 Main files:
 ```
@@ -56,7 +69,7 @@ Save the following as a CSV file to test the example templates located in this r
 ```
 ChannelType,Id,Address,User.UserId,Attributes.FirstName,Attributes.brand,Attributes.Price,Attributes.Locale,Attributes.Currency,Attributes.ExpireDate
 EMAIL,1,EMAIL_ADDRESS1_HERE,1,Ryan,mainbrand,125.32,en-US,USD,2020-03-10T10:00:00
-EMAIL,2,EMAIL_ADDRESS2_HERE,2,John,subbrand,321.45,zh-CN,JPY,2020-05-10T10:00:00
+EMAIL,2,EMAIL_ADDRESS2_HERE,2,JOHN,subbrand,321.45,zh-CN,JPY,2020-05-10T10:00:00
 ```
 
 ## Set up
@@ -71,7 +84,7 @@ EMAIL,2,EMAIL_ADDRESS2_HERE,2,John,subbrand,321.45,zh-CN,JPY,2020-05-10T10:00:00
     | --------------- | --------------- | --------------- |
     | campaign-hook | TEMPLATE_ENGINE_LAMBDA | [ARN of the Template Lambda Function]
     | template-engine | TEMPLATE_BUCKET | [Template S3 Bucket Name] |
-    
+
 3. Create a Pinpoint Project
 4. Connect the campaign hook Lambda to a Pinpoint Project
 [Full Lambda Hook Documentation for](https://docs.aws.amazon.com/pinpoint/latest/developerguide/segments-dynamic.html)
