@@ -36,6 +36,33 @@ Using MustacheJS to render email templates stored in S3
 
 ```
 
+Note that the content-block "common/header.html" is also parsed for MustacheJS expressions and even more content-blocks.  Each content-block is therefore recursively processed:
+
+```
+...
+<td style="border:0px;">
+  <table border="0" cellspacing="0" cellpadding="0" width="100%">
+    <tr>
+      <td align="left" valign="top">
+        <table width="100%" cellpadding="10" cellspacing="0" border="0">
+          <tr>
+
+           {{#ifEquals Attributes.brand "mainbrand"}}
+             {{content-block "common/mainbrand/brand_header.html"}}
+           {{/ifEquals}}
+           {{#ifEquals Attributes.brand "subbrand"}}
+             {{content-block "common/subbrand/brand_header.html"}}
+           {{/ifEquals}}
+
+          </tr>
+          <tr>
+            <td width="100%" bgcolor="FFFFFF">
+              <table cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;">
+                <tr>
+                  <td>
+...
+```
+
 ## MustacheJS Registered Helpers
 | Helper | Description |
 | ---- | ---- |
