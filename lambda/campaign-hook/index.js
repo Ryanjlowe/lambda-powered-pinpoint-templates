@@ -22,11 +22,20 @@ exports.handler = async (event) => {
     .then((response) => {
 
       // Parse the BaseTemplate name out of the Pinpoint Template and construct a content-block for it
-      const regex = new RegExp('{{! *BaseTemplate=([^ ]*) *}}');
-      const found = response.EmailTemplateResponse.HtmlPart.match(regex);
+      const regex = new RegExp('{{!.* *BaseTemplate=([^ ]*) *.*}}');
+      const foundEmail = response.EmailTemplateResponse.HtmlPart.match(regex);
 
-      const h = '{{content-block "' + found[1] + '"}}';
-      console.log('Found HTML: ' + h);
+      const h = '{{content-block "' + foundEmail[1] + '"}}';
+      // console.log('Found HTML: ' + h);
+
+      let attribute = 'html';
+      const regexAttr = new RegExp('{{!.* ?TargetAttribute=([^ ]*) *.*}}');
+      const foundAttr = response.EmailTemplateResponse.HtmlPart.match(regexAttr);
+
+      if (foundAttr.length > 0) {
+        attribute = foundAttr[1];
+        // console.log('Found Attr: ' + attribute);
+      }
 
       const promises = [];
       Object.keys(event.Endpoints).forEach((endpointId, ind) => {
@@ -52,7 +61,7 @@ exports.handler = async (event) => {
              endpoint.Attributes = {};
            }
 
-           endpoint.Attributes.html = [html];
+           endpoint.Attributes[attribute] = [html];
            return endpoint;
          });
 

@@ -134,11 +134,15 @@ aws lambda add-permission \
  --application-id [PINPOINT_PROJECT_ID] \
  --write-application-settings-request 'CampaignHook={LambdaFunctionName="[CAMPAIGN_HOOK LAMBDA ARN]",Mode="FILTER"}'
 ```
+
 5. Create a Pinpoint Template with the following Message Body
+
 ```
 <!DOCTYPE html>
-{{! BaseTemplate=emails/ice_cream.html }}
-<html>{{Attributes.html}}</html>
+{{! BaseTemplate=emails/ice_cream.html TargetAttribute=html_ice }}
+<html>{{Attributes.html_ice}}</html>
 ```
+
 6. Import segment from above
+
 7. Create a campaign using the segment and the created Pinpoint Template and schedule for immediate send
