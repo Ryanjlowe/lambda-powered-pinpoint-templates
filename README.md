@@ -1,5 +1,7 @@
 # Lambda Powered Amazon Pinpoint Templates
-Using MustacheJS to render email templates stored in S3
+Amazon Pinpoint allows you to manage Email, SMS, Push, and Voice templates via the AWS Console and APIs.  Pinpoint is also extremely extensible and does not require you to use these templates.  This is a POC built to showcase how you can retrieve and render templates outside of Pinpoint for use in Pinpoint campaigns using Lambda functions.  
+
+This example uses MustacheJS with custom Helpers to render email templates stored in S3 using Pinpoint Endpoint Attributes AND data returned from invoking other Lambda functions.  In this way, data can be rendered in templates that exist in other RDS, DynamoDB, on-premises systems, Salesforce CRM, or wherever!
 
 
 ## Example Email Template
