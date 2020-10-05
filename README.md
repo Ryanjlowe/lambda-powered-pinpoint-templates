@@ -34,9 +34,11 @@ This example uses MustacheJS with custom Helpers to render email templates store
   {{/invokeLambda}}
 </p>
 
-{{#translate-text "en" Attributes.PreferredLanguage}}
-This is English that will be translated into the preferred language of the current user by Amazon Translate.
-{{/translate-text}}
+<p>
+  {{#translate-text "en" Attributes.PreferredLanguage.[0]}}
+  This is English that will be translated into the preferred language of the current user by Amazon Translate.
+  {{/translate-text}}
+</p>
 
 
 {{content-block "common/footer.html"}}
@@ -78,7 +80,7 @@ Note that the content-block "common/header.html" is also parsed for MustacheJS e
 | currencyFormat | formats a string of numbers for currency display |
 | dateFormat | formats a string into a date string |
 | invokeLambda | block invokes another lambda and makes the return object available inside the block |
-| translate-text | translates the given text using Amazon Translate | 
+| translate-text | translates the given text using Amazon Translate |
 | upperCase | RETURNS AN UPPERCASED VERSION OF THE STRING |
 | lowerCase | returns a lowercased version of the string |
 | properCase | Returns A String Where Every Word Starts With A Capital Letter |
