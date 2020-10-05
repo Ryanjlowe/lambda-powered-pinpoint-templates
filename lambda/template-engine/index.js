@@ -9,6 +9,7 @@ const Handlebars = promisedHandlebars(require('handlebars'), { Promise: Q.Promis
 
 const lambda = new AWS.Lambda();
 const s3 = new AWS.S3();
+const translate = new AWS.Translate();
 
 Handlebars.registerHelper('content-block', function(s3Key, context) {
 
@@ -87,6 +88,17 @@ Handlebars.registerHelper('urlencode', (strArr) => {
   return [].concat(strArr).map((str) => {
     return encodeURIComponent(str);
   });
+});
+
+Handlebars.registerHelper('translate-text', function(source, target, options) {
+  return translate.translateText({
+    SourceLanguageCode: source,
+    TargetLanguageCode: target,
+    Text: options.fn(this)
+  }).promise()
+     .then((response) => {
+       return response.TranslatedText;
+     });
 });
 
 
